@@ -98,7 +98,17 @@ public class RqlitePreparedStatement implements PreparedStatement {
             checkExecuteResults(update_result);
         } else {
             update_result = null;
-            queryResults = conn.db.Query(stmt_sql, Rqlite.ReadConsistencyLevel.WEAK);
+            if (params == null || params.length == 0) {
+                queryResults = conn.db.Query(stmt_sql, Rqlite.ReadConsistencyLevel.WEAK);
+            } else {
+
+                Object[] stmts = new Object[params.length + 1];
+                stmts[0] = stmt_sql;
+                for (int i = 0; i < params.length; i++) {
+                    stmts[i + 1] = params[i];
+                }
+                queryResults = conn.db.Query(new Object[]{stmts}, true, Rqlite.ReadConsistencyLevel.WEAK);
+            }
             checkQueryResults(queryResults);
             meta = new RqliteResultSetMetaData(
                     params != null ? params.length: 0,
@@ -190,7 +200,9 @@ public class RqlitePreparedStatement implements PreparedStatement {
         if (stmt_sql == null) {
             throw new SQLException("Prepare something first");
         }
-        return new RqliteParameterMetaData(meta);
+
+        long param_count = stmt_sql.chars().filter(ch -> ch == '?').count();
+        return new RqliteParameterMetaData(param_count);
     }
 
     @Override

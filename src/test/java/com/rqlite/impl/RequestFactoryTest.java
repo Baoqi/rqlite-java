@@ -11,7 +11,7 @@ public class RequestFactoryTest {
     @Test
     public void testRequestFactoryQuery() throws IOException {
         RequestFactory factory = new RequestFactory("http", "localhost", 4001);
-        QueryRequest request = factory.buildQueryRequest(new String[] {});
+        QueryRequest request = factory.buildQueryRequest(new Object[] {});
         Assert.assertEquals("http://localhost:4001/db/query", request.getUrl());
         Assert.assertEquals("POST", request.getMethod());
         Assert.assertEquals("[]", request.getBody());
@@ -35,7 +35,7 @@ public class RequestFactoryTest {
     @Test
     public void testRequestFactorQueryStatement() throws IOException {
         RequestFactory factory = new RequestFactory("http", "localhost", 4001);
-        QueryRequest request = factory.buildQueryRequest(new String[] { "SELECT * FROM foo" });
+        QueryRequest request = factory.buildQueryRequest(new Object[] { "SELECT * FROM foo" });
         Assert.assertEquals("http://localhost:4001/db/query", request.getUrl());
         Assert.assertEquals("POST", request.getMethod());
         Assert.assertEquals("[\"SELECT * FROM foo\"]", request.getBody());
@@ -44,7 +44,7 @@ public class RequestFactoryTest {
     @Test
     public void testRequestFactorQueryStatementMulti() throws IOException {
         RequestFactory factory = new RequestFactory("http", "localhost", 4001);
-        QueryRequest request = factory.buildQueryRequest(new String[] { "SELECT * FROM foo", "SELECT * FROM bar" });
+        QueryRequest request = factory.buildQueryRequest(new Object[] { "SELECT * FROM foo", "SELECT * FROM bar" });
         Assert.assertEquals("http://localhost:4001/db/query", request.getUrl());
         Assert.assertEquals("POST", request.getMethod());
         Assert.assertEquals("[\"SELECT * FROM foo\",\"SELECT * FROM bar\"]", request.getBody());

@@ -5,10 +5,10 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 
 public class RqliteParameterMetaData implements ParameterMetaData {
-    private RqliteResultSetMetaData meta;
+    private final long param_count;
 
-    public RqliteParameterMetaData(RqliteResultSetMetaData meta) {
-        this.meta = meta;
+    public RqliteParameterMetaData(long param_count) {
+        this.param_count = param_count;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RqliteParameterMetaData implements ParameterMetaData {
 
     @Override
     public int getParameterCount() throws SQLException {
-        return meta.param_count;
+        return (int)param_count;
     }
 
     @Override

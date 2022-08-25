@@ -61,7 +61,7 @@ public class RqliteImpl implements Rqlite {
         }
     }
 
-    private GenericResults tryOtherPeers(GenericRequest request, String[] stmts) throws NodeUnavailableException {
+    private GenericResults tryOtherPeers(GenericRequest request, Object[] stmts) throws NodeUnavailableException {
         // Cycle through the list of nodes in the config file.
         long end = System.currentTimeMillis() + timeoutDelay;
         if (peers != null) {
@@ -90,7 +90,7 @@ public class RqliteImpl implements Rqlite {
         throw new NodeUnavailableException("Could not connect to rqlite node.  Please check that the node is online and that your config files point to the correct address.");
     }
 
-    public QueryResults Query(String[] stmts, boolean tx, ReadConsistencyLevel lvl) throws NodeUnavailableException {
+    public QueryResults Query(Object[] stmts, boolean tx, ReadConsistencyLevel lvl) throws NodeUnavailableException {
         QueryRequest request;
 
         try {
@@ -116,7 +116,7 @@ public class RqliteImpl implements Rqlite {
         return this.Query(new String[] { s }, false, lvl);
     }
 
-    public ExecuteResults Execute(String[] stmts, boolean tx) throws NodeUnavailableException {
+    public ExecuteResults Execute(Object[] stmts, boolean tx) throws NodeUnavailableException {
         ExecuteRequest request;
         try {
             request = this.requestFactory.buildExecuteRequest(stmts);

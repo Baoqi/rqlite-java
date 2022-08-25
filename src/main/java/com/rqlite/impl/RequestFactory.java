@@ -39,12 +39,12 @@ public class RequestFactory {
         });
     }
 
-    public ExecuteRequest buildExecuteRequest(String[] stmts) throws IOException {
+    public ExecuteRequest buildExecuteRequest(Object[] stmts) throws IOException {
         HttpRequest request = this.buildPostRequest(this.executeUrl, stmts);
         return new ExecuteRequest(request);
     }
 
-    public QueryRequest buildQueryRequest(String[] stmts) throws IOException {
+    public QueryRequest buildQueryRequest(Object[] stmts) throws IOException {
         HttpRequest request = this.buildPostRequest(this.queryUrl, stmts);
         return new QueryRequest(request);
     }
@@ -54,7 +54,7 @@ public class RequestFactory {
         return new PingRequest(request);
     }
 
-    private HttpRequest buildPostRequest(GenericUrl url, String[] stmts) throws IOException {
+    private HttpRequest buildPostRequest(GenericUrl url, Object[] stmts) throws IOException {
         HttpRequest request = this.requestFactory.buildPostRequest(url, new JsonHttpContent(JSON_FACTORY, stmts));
         return request.setParser(new JsonObjectParser(JSON_FACTORY));
     }

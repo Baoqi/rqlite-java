@@ -44,7 +44,7 @@ public class RqliteResultSetMetaData implements ResultSetMetaData {
             return Types.TINYINT;
         } else if (type_name.equals("SMALLINT")) {
             return Types.SMALLINT;
-        } else if (type_name.equals("INTEGER")) {
+        } else if (type_name.equals("INTEGER") || type_name.equals("INT")) {
             return Types.INTEGER;
         } else if (type_name.equals("BIGINT")) {
             return Types.BIGINT;
@@ -52,7 +52,7 @@ public class RqliteResultSetMetaData implements ResultSetMetaData {
             return Types.FLOAT;
         } else if (type_name.equals("DOUBLE") || type_name.startsWith("DECIMAL")) {
             return Types.DOUBLE;
-        } else if (type_name.equals("VARCHAR")) {
+        } else if (type_name.equals("VARCHAR") || type_name.equals("STRING") || type_name.equals("TEXT")) {
             return Types.VARCHAR;
         } else if (type_name.equals("TIME")) {
             return Types.TIME;
@@ -104,7 +104,12 @@ public class RqliteResultSetMetaData implements ResultSetMetaData {
         if (column > column_count) {
             throw new SQLException("Column index out of bounds");
         }
-        return column_types[column - 1];
+        String type = column_types[column - 1].toUpperCase();
+        if (type == null | type.isEmpty()) {
+            return "STRING";
+        } else {
+            return type;
+        }
     }
 
     public boolean isReadOnly(int column) throws SQLException {

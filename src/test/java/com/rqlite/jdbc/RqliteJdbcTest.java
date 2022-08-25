@@ -34,6 +34,18 @@ public class RqliteJdbcTest {
         }
     }
 
+    @Test
+    public void testPreparedStatement() throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("select ?")) {
+            statement.setString(1, "abc");
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    System.out.println(resultSet.getString(1));
+                }
+            }
+        }
+    }
+
     @After
     public void teardown() throws SQLException {
         connection.close();
