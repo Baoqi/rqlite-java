@@ -95,9 +95,11 @@ public class RqlitePreparedStatement implements PreparedStatement {
             queryResults = null;
             select_result = null;
             update_result = conn.db.Execute(stmt_sql);
+            checkExecuteResults(update_result);
         } else {
             update_result = null;
             queryResults = conn.db.Query(stmt_sql, Rqlite.ReadConsistencyLevel.WEAK);
+            checkQueryResults(queryResults);
             meta = new RqliteResultSetMetaData(
                     params != null ? params.length: 0,
                     queryResults.results[0].columns.length,
@@ -107,6 +109,30 @@ public class RqlitePreparedStatement implements PreparedStatement {
             select_result = new RqliteResultSet(this, meta, queryResults);
         }
         return !is_update;
+    }
+
+    private void checkExecuteResults(ExecuteResults results) throws SQLException {
+        ExecuteResults.Result[] resultArray = results.results;
+        if (resultArray.length == 0) {
+            throw new SQLException("no result is found");
+        } else {
+            ExecuteResults.Result result = resultArray[0];
+            if (result.error != null && !result.error.isEmpty()) {
+                throw new SQLException(result.error);
+            }
+        }
+    }
+
+    private void checkQueryResults(QueryResults results) throws SQLException {
+        QueryResults.Result[] resultArray = results.results;
+        if (resultArray.length == 0) {
+            throw new SQLException("no result is found");
+        } else {
+            QueryResults.Result result = resultArray[0];
+            if (result.error != null && !result.error.isEmpty()) {
+                throw new SQLException(result.error);
+            }
+        }
     }
 
     @Override
