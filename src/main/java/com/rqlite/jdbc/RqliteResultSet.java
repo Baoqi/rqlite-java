@@ -40,7 +40,7 @@ public class RqliteResultSet implements ResultSet {
         this.stmt = stmt;
         this.result_ref = queryResults.results[0];
         this.meta = meta;
-        if (result_ref.values.length == 0) {
+        if (result_ref.values == null || result_ref.values.length == 0) {
             finished = true;
         }
     }
