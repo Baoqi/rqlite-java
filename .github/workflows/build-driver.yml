@@ -20,9 +20,12 @@ jobs:
           ref: ${{ github.event.inputs.metabase-version }}
           path: metabase
       - uses: actions/checkout@v2
+        with:
+          path: test1
       - name: "debug folder structure"
         run: |
           echo $(pwd)
           ls -l ./
           ls -l ../
           ls -l ./metabase/
+          lst -l ./test1/
