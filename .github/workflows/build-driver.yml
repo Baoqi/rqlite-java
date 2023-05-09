@@ -1,0 +1,28 @@
+name: Build connector
+
+on:
+  workflow_dispatch:
+    inputs:
+      metabase-version:
+        required: true
+        description: Metabase version to compile with
+        type: string
+        default: v0.46.2
+
+jobs:
+  build-connector:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Metabase Code"
+        uses: actions/checkout@v2
+        with:
+          repository: metabase/metabase
+          ref: ${{ github.event.inputs.metabase-version }}
+          path: ../metabase
+      - uses: actions/checkout@v2
+      - name: "debug folder structure"
+        run: |
+          echo $(pwd)
+          ls -l
+          ls -l ../
+          ls -l ../metabase
