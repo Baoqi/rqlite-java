@@ -18,11 +18,11 @@ jobs:
         with:
           repository: metabase/metabase
           ref: ${{ github.event.inputs.metabase-version }}
-          path: ../metabase
+          path: metabase
       - uses: actions/checkout@v2
       - name: "debug folder structure"
         run: |
           echo $(pwd)
-          ls -l
+          ls -l ./
           ls -l ../
-          ls -l ../metabase
+          ls -l ./metabase/
