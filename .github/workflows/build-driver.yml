@@ -19,13 +19,33 @@ jobs:
           repository: metabase/metabase
           ref: ${{ github.event.inputs.metabase-version }}
           path: metabase
-      - uses: actions/checkout@v2
+
+      - name: "Checkout Driver"
+        uses: actions/checkout@v2
         with:
-          path: test1
+          repository: Baoqi/metabase-dremio-driver
+          path: metabase-dremio-driver
+
+      - name: Prepare java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@3.7
+        if: steps.cache-metabase-jar.outputs.cache-hit != 'true'
+        with:
+          # Install just one or all simultaneously
+          cli: 'latest' # Clojure CLI based on tools.deps
+
+      - name: "Run build.sh"
+        run: |
+          cd metabase-dremio-driver && ./build.sh
+
       - name: "debug folder structure"
         run: |
           echo $(pwd)
-          ls -l ./
-          ls -l ../
-          ls -l ./metabase/
-          lst -l ./test1/
+          ls -lah ./
+          ls -lah ../
+          ls -lah ./target/
